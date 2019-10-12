@@ -1,0 +1,12 @@
+#center { 
+    width: 10px; 
+    height: 10px;
+    position: relative;
+    margin: auto;
+    background: #000; 
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
