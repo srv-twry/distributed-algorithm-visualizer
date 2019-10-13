@@ -7,15 +7,17 @@ class Node extends React.Component {
         if (this.props.node.isLeader) {
             classes.push("leader");
         }
+        let nextMessage;
+        if(this.props.node.data > 0) {
+            nextMessage = <div className="box">{this.props.node.data}</div>;
+        }
 
         return (
             <div>
                 <div className={classes.join(" ")}>
                     {this.props.node.uid}
                 </div>
-                <div className="box">
-                    
-                </div>
+                {nextMessage}
             </div>
         );
     }

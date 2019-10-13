@@ -9,7 +9,7 @@ class Ring extends React.Component {
     static defaultState = {
         "nodes": [],
         "inProgress": false,
-        "numNodes": 3,
+        "numNodes": 5,
         "algorithm": "LCR",
         "speed": "regular"
     }
@@ -56,16 +56,13 @@ class Ring extends React.Component {
                 }
             }
 
-            let nxt = index + 1;
-            if(nxt === numNodes) nxt = 0;
             let currentNode = {
                 "id": index + 1,
                 "uid": uniqueIdentifier,
                 "isLeader": false,
                 "xCoordinate": coordinates[index][0] + xOffset,
                 "yCoordinate": coordinates[index][1],
-                "nextX": coordinates[nxt][0] + xOffset,
-                "nextY": coordinates[nxt][1]
+                "data": null
             }
             createdNodes.push(currentNode);
         }
@@ -89,9 +86,30 @@ class Ring extends React.Component {
         this.setState({
             inProgress: true
         });
+        let animationTime = 1000;
+        if(this.state.speed === "slow") {
+            animationTime = 2000;
+        } else if(this.state.speed === "fast") {
+            animationTime = 500;
+        }
+
         if(this.state.algorithm === "LCR") {
-            let result = lcr(this.state.nodes);
-            console.log(result);
+            let {path, leader} = lcr(this.state.nodes);
+            for(let idx = 0; idx < path.length; idx++) {
+                setTimeout(() => {
+                    const res = path[idx];
+                    let newNodes = this.state.nodes;
+                    for (let nidx = 0; nidx < newNodes.length; nidx++) {
+                        newNodes[nidx].data = res[nidx];
+                        if (idx === path.length - 1 && nidx === leader) {
+                            newNodes[nidx].isLeader = true;
+                        }
+                    }
+                    this.setState({
+                        node: newNodes
+                    });
+                }, animationTime * idx);
+            }
         }
         this.setState({ inProgress: false });
     }
@@ -141,7 +159,7 @@ class Ring extends React.Component {
         return (
             <div>
                 <div>
-                    <Navbar bg="dark" variant="dark" expand="xl">
+                    <Navbar bg="dark" variant="dark" expand="xl" className="justify-content-between">
                         <Navbar.Brand href="">
                             <img
                                 alt=""
@@ -150,7 +168,7 @@ class Ring extends React.Component {
                                 height="30"
                                 className="d-inline-block align-top"
                             />
-                            {' Algo Visualizer'}
+                            {' Algorithm Visualizer'}
                         </Navbar.Brand>
                         &emsp; &emsp; &emsp; &emsp;
                         <ButtonToolbar>
