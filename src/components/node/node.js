@@ -1,11 +1,12 @@
 import React from 'react';
+import "./node.css";
 
 class Node extends React.Component {
     // Needs: id, uuid, x and y coordinates, isLeader.
     render() {
         return (
-            <div>
-                <h1>{this.props.id}</h1>
+            <div id="node">
+                
             </div>
         );
     }

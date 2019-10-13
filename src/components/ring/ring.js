@@ -1,10 +1,11 @@
 import React from 'react';
 import "./ring.css"
+import Node from "../node/node.js";
 import distributeNodes from './utils';
 
 class Ring extends React.Component {
     static defaultProps = {
-        numNodes: 3,
+        numNodes: 15,
         algorithm: "LCR",
         speed: "Normal"    
     }
@@ -12,13 +13,14 @@ class Ring extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            "nodes": this.generateNodes()
+            "nodes": this.generateNodes(),
+            "containerWidth": null
         }
     }
 
     generateNodes() {
         let createdNodes = [], coordinates = [];
-        coordinates = distributeNodes(200, 800, 800, 10, this.props.numNodes);
+        coordinates = distributeNodes(300, 800, 1000, 10, this.props.numNodes);
 
         for (let index = 0; index < this.props.numNodes; index++) {
             let uniqueIdentifier;
@@ -54,10 +56,35 @@ class Ring extends React.Component {
         return createdNodes;
     }
 
-    render() {
+    // source: https://stackoverflow.com/a/49059117/6748052
+    componentDidMount() {
+        this.setState({
+            containerWidth: this.container.offsetWidth,
+        });
+    }
+
+    generateStyles() {
+        let containerWidth = document.getElementById("container");
+        console.log(containerWidth);
+    }
+
+    renderContent() {
         return (
-            <div id="container">
-                <div id="center" style={{ textAlign: "center" }}></div>
+            <div>
+                {this.state.nodes.map(node =>
+                    <div key={node.id} style={{ top: node.yCoordinate + "px", left: node.xCordinate + "px", position: "absolute" }}>
+                        <Node node={node} />
+                    </div>)}
+            </div>
+        );
+    }
+
+    render() {
+        const { containerWidth } = this.state;
+
+        return (
+            <div id="container" ref={el => (this.container = el)}>
+                {containerWidth && this.renderContent()}
             </div>
         );
     }
