@@ -1,7 +1,15 @@
-#node {
-    display:"inline-block";
-    width:20px;
-    height:20px;
-    border-radius: 50%;
-    background-color: brown;
+.circle {
+  display:table-cell;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 20px;
+  color: #fff;
+  vertical-align: middle;
+  text-align: center;
+  background: black;
+}
+
+.leader {
+  background: red;
 }

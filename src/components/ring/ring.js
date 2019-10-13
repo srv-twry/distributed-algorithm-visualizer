@@ -13,21 +13,23 @@ class Ring extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            "nodes": this.generateNodes(),
-            "containerWidth": null
+            "nodes": [],
+            "containerWidth": null,
+            "containerHeight": null
         }
     }
 
-    generateNodes() {
+    generateNodes(containerWidth) {
         let createdNodes = [], coordinates = [];
-        coordinates = distributeNodes(300, 800, 1000, 10, this.props.numNodes);
+        const xOffset = Math.max(0, (containerWidth - 800)/ 2 - 50);
+        coordinates = distributeNodes(325, 800, 800, 10, this.props.numNodes);
 
         for (let index = 0; index < this.props.numNodes; index++) {
             let uniqueIdentifier;
 
-            // generate a unique identifier between 1 and 1000.
+            // generate a unique identifier between 1 and 99.
             while (true) {
-                uniqueIdentifier = Math.floor(Math.random() * 1000 + 1);
+                uniqueIdentifier = Math.floor(Math.random() * 99 + 1);
                 let tobreak = true;
 
                 for (let i = 0; i < createdNodes.length; i++) {
@@ -47,7 +49,7 @@ class Ring extends React.Component {
                 "id": index + 1,
                 "uid": uniqueIdentifier,
                 "isLeader": false,
-                "xCordinate": coordinates[index][0],
+                "xCordinate": coordinates[index][0] + xOffset,
                 "yCoordinate": coordinates[index][1]
             }
             createdNodes.push(currentNode);
@@ -60,12 +62,9 @@ class Ring extends React.Component {
     componentDidMount() {
         this.setState({
             containerWidth: this.container.offsetWidth,
+            containerHeight: this.container.offsetHeight,
+            nodes: this.generateNodes(this.container.offsetWidth)
         });
-    }
-
-    generateStyles() {
-        let containerWidth = document.getElementById("container");
-        console.log(containerWidth);
     }
 
     renderContent() {

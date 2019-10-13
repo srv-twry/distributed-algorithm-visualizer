@@ -19,6 +19,8 @@ function NavbarInstance() {
                 <ButtonToolbar>
                     <Button variant="primary" href="#">Add node</Button>
                     &emsp;
+                    <Button variant="primary" href="#">Remove node</Button>
+                    &emsp;
                     <DropdownButton id="dropdown-basic-button" title="Algorithm">
                         <Dropdown.Item href="#/action-1">LCR Algorithm</Dropdown.Item>
                     </DropdownButton>
