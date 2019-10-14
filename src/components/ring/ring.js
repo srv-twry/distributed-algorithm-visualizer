@@ -4,6 +4,7 @@ import Node from "../node/node.js";
 import distributeNodes from './utils';
 import lcr from "../../algorithms/lcr";
 import { Navbar, Button, ButtonToolbar, Dropdown, DropdownButton } from "react-bootstrap";
+import {getLCRMetaData} from "../../algorithms/lcr";
 
 class Ring extends React.Component {
     static defaultState = {
@@ -152,9 +153,24 @@ class Ring extends React.Component {
         );
     }
 
+    getMetaDataOfAlgorithm() {
+        if(this.state.algorithm === "LCR") {
+            return getLCRMetaData();
+        }
+    }
+
+    renderDescription(description) {
+        return (
+            description.split("\n").map((i, key) => {
+                return <div key={key}>{i}</div>;
+            })
+        );
+    }
+
     render() {
         const { containerWidth } = this.state;
         let disabledState = (this.state.inProgress) ? "disabled" : null;
+        let meta = this.getMetaDataOfAlgorithm();
 
         return (
             <div>
@@ -172,27 +188,32 @@ class Ring extends React.Component {
                         </Navbar.Brand>
                         &emsp; &emsp; &emsp; &emsp;
                         <ButtonToolbar>
-                            <Button variant="primary" disabled={disabledState} onClick={this.addNode}>Add node</Button>
+                            <Button variant="secondary" disabled={disabledState} onClick={this.addNode}>Add node</Button>
                             &emsp;
-                            <Button variant="primary" disabled={disabledState} onClick={this.removeNode}>Remove node</Button>
-                            &emsp;
-                            <DropdownButton id="dropdown-basic-button" title="Algorithm" onSelect={this.chooseAlgorithm} disabled={disabledState}>
-                                <Dropdown.Item eventKey="LCR">LCR Algorithm</Dropdown.Item>
-                            </DropdownButton>
-                            &emsp;
-                            <Button variant="primary" type="submit" onClick={this.runAlgorithm} disabled={disabledState}>Visualize</Button>
+                            <Button variant="secondary" disabled={disabledState} onClick={this.removeNode}>Remove node</Button>
                             &emsp;
                             <DropdownButton id="dropdown-basic-button" title="Speed" onSelect={this.selectSpeed} disabled={disabledState}>
                                 <Dropdown.Item eventKey="slow">Slow</Dropdown.Item>
                                 <Dropdown.Item eventKey="regular">Regular</Dropdown.Item>
                                 <Dropdown.Item eventKey="fast">Fast</Dropdown.Item>
                             </DropdownButton>
+                            &emsp;
+                            <DropdownButton id="dropdown-variants-secondary" title="Algorithm" onSelect={this.chooseAlgorithm} disabled={disabledState}>
+                                <Dropdown.Item eventKey="LCR">LCR Algorithm</Dropdown.Item>
+                            </DropdownButton>
+                            &emsp;
+                            <Button variant="success" type="submit" onClick={this.runAlgorithm} disabled={disabledState}>Visualize</Button>
                         </ButtonToolbar>
                     </Navbar>
                 </div>
 
                 <div id="container" ref={el => (this.container = el)}>
                     {containerWidth && this.renderContent()}
+                </div>
+
+                <div id="description" >
+                    {containerWidth && <h3>{meta.title}</h3>}
+                    {containerWidth && this.renderDescription(meta.description)}
                 </div>
             </div>
         );

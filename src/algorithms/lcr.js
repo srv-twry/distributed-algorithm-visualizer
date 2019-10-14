@@ -43,4 +43,28 @@ function lcr(nodes) {
     }
 }
 
+/**
+ * Returns an object with the metadata of the LCR algorithm.
+ */
+function getLCRMetaData() {
+    return {
+        "title": "LCR Algorithm",
+        "description": `Each process sends its UID around the ring.
+
+When a process receives a UID, it compares
+this one to its own.
+
+– If the incoming UID is greater, then it
+passes this UID to the next process.
+– If the incoming UID is smaller, then it
+discards it.
+– If it is equal, then the process declares
+itself the leader.
+`,
+        "time-complexity": "O(n)",
+        "message-complexity": "O(n^2) in worst case, O(nlogn) in average case"
+    }
+}
+
 export default lcr;
+export {getLCRMetaData};
