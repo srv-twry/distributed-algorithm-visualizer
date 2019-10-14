@@ -7,6 +7,7 @@ import { Navbar, Button, ButtonToolbar, Dropdown, DropdownButton } from "react-b
 import {getLCRMetaData} from "../../algorithms/lcr";
 
 const MINIMUM_NODES = 3;
+const MAXIMUM_NODES = 25;
 
 class Ring extends React.Component {
     static defaultState = {
@@ -118,6 +119,10 @@ class Ring extends React.Component {
     }
 
     addNode() {
+        if (this.state.numNodes >= MAXIMUM_NODES) {
+            return;
+        }
+
         this.setState((previous) => ({
             numNodes: previous.numNodes + 1,
             nodes: this.generateNodes(this.container.offsetWidth, previous.numNodes + 1)
@@ -177,6 +182,7 @@ class Ring extends React.Component {
         const { containerWidth } = this.state;
         let disabledState = (this.state.inProgress) ? "disabled" : null;
         let removeNodeBtnDisableState = disabledState || this.state.numNodes <= MINIMUM_NODES;
+        let addNodeBtnDisabledState = disabledState || this.state.numNodes >= MAXIMUM_NODES;
         let meta = this.getMetaDataOfAlgorithm();
 
         return (
@@ -195,7 +201,7 @@ class Ring extends React.Component {
                         </Navbar.Brand>
                         &emsp; &emsp; &emsp; &emsp;
                         <ButtonToolbar>
-                            <Button variant="secondary" disabled={disabledState} onClick={this.addNode}>Add node</Button>
+                            <Button variant="secondary" disabled={addNodeBtnDisabledState} onClick={this.addNode}>Add node</Button>
                             &emsp;
                             <Button variant="secondary" disabled={removeNodeBtnDisableState} onClick={this.removeNode}>Remove node</Button>
                             &emsp;
