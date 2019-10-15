@@ -6,6 +6,8 @@ import lcr from "../../algorithms/lcr";
 import { Navbar, Button, ButtonToolbar, Dropdown, DropdownButton } from "react-bootstrap";
 import {getLCRMetaData} from "../../algorithms/lcr";
 
+const MINIMUM_NODES = 3;
+
 class Ring extends React.Component {
     static defaultState = {
         "nodes": [],
@@ -123,6 +125,10 @@ class Ring extends React.Component {
     }
 
     removeNode() {
+        if (this.state.numNodes <= MINIMUM_NODES) {
+            return;
+        }
+
         this.setState((previous) => ({
             numNodes: previous.numNodes - 1,
             nodes: this.generateNodes(this.container.offsetWidth, previous.numNodes - 1)
@@ -170,6 +176,7 @@ class Ring extends React.Component {
     render() {
         const { containerWidth } = this.state;
         let disabledState = (this.state.inProgress) ? "disabled" : null;
+        let removeNodeBtnDisableState = disabledState || this.state.numNodes <= MINIMUM_NODES;
         let meta = this.getMetaDataOfAlgorithm();
 
         return (
@@ -190,7 +197,7 @@ class Ring extends React.Component {
                         <ButtonToolbar>
                             <Button variant="secondary" disabled={disabledState} onClick={this.addNode}>Add node</Button>
                             &emsp;
-                            <Button variant="secondary" disabled={disabledState} onClick={this.removeNode}>Remove node</Button>
+                            <Button variant="secondary" disabled={removeNodeBtnDisableState} onClick={this.removeNode}>Remove node</Button>
                             &emsp;
                             <DropdownButton id="dropdown-basic-button" title="Speed" onSelect={this.selectSpeed} disabled={disabledState}>
                                 <Dropdown.Item eventKey="slow">Slow</Dropdown.Item>
